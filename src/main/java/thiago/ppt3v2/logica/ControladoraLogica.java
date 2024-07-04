@@ -34,6 +34,10 @@ public class ControladoraLogica {
         return controlPersis.traerTodosLosUsuarios();
     }    
     
+    public void mergearUsuario(Usuario usuario){
+        controlPersis.mergearUsuario(usuario);
+    }
+    
    //----------------------------- CARTAS -------------------
         
     public void crearCartas(Cartas carta){
@@ -62,6 +66,9 @@ public class ControladoraLogica {
         return controlPersis.tablaEstaVacia(nombreTabla);
     }
     
+    public void eliminarTabla(String nombreTabla){
+        controlPersis.eliminarTabla(nombreTabla);
+    }
     
     // ------------------------ CARTAUSUARIO ------------------------
     
@@ -69,8 +76,8 @@ public class ControladoraLogica {
         controlPersis.crearCartaUsuario(cartaUsuario);
     }
     
-    public List<CartaUsuario> findByUsuarioId(int id){
-        return controlPersis.findByUsuarioId(id);
+    public List<CartaUsuario> findByUsuarioId(Integer usuarioId){
+        return controlPersis.findByUsuarioId(usuarioId);
     }
     
     public List<Cartas> traerTodoCarta(){

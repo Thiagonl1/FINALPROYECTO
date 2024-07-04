@@ -1,4 +1,5 @@
 thiago\ppt3v2\persistencia\exceptions\NonexistentEntityException.class
+thiago\ppt3v2\logica\Banco.class
 thiago\ppt3v2\PPT3v20.class
 thiago\ppt3v2\logica\Cartas_.class
 thiago\ppt3v2\logica\ControladoraLogica.class
@@ -8,6 +9,7 @@ thiago\ppt3v2\logica\Cartas.class
 thiago\ppt3v2\logica\CartaUsuario_.class
 thiago\ppt3v2\persistencia\CartasJpaController.class
 thiago\ppt3v2\persistencia\UsuarioJpaController.class
+thiago\ppt3v2\logica\Ia.class
 thiago\ppt3v2\logica\Usuario.class
 thiago\ppt3v2\persistencia\exceptions\PreexistingEntityException.class
 thiago\ppt3v2\persistencia\CartaUsuarioJpaController.class

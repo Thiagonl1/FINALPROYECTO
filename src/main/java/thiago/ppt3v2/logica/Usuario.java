@@ -102,14 +102,59 @@ public class Usuario extends Thread implements Serializable {
 
     }*/
 
-    
-    public void juego(int desicion, Usuario ia, List<Cartas> cartaMano){
+    public void verificar(Cartas cartaUsuario, Cartas cartaIa, int usuarioId, int iaId){
         ControladoraPersistencia controlP = new ControladoraPersistencia();
-        
+        Usuario usuario = controlP.traerUsuario(usuarioId);
+        Usuario ia = controlP.traerUsuario(iaId);
+        String tipoUsuario = cartaUsuario.getTipo();
+        String tipoIA = cartaIa.getTipo();
+        System.out.println(cartaIa.getTipo() +" usuario "+ cartaUsuario.getTipo());
+        if (tipoUsuario.equals(tipoIA)) {
+            System.out.println("Se empato");
+        } else if (tipoUsuario.equals("Piedra")) {
+            if (tipoIA.equals("Papel")){
+                System.out.println("Perdiste");
+                usuario.setEstrellas(usuario.getEstrellas()-1);
+                ia.setEstrellas(ia.getEstrellas()+1);
+            } else{
+                System.out.println("Ganaste");
+                usuario.setEstrellas(usuario.getEstrellas()+1);
+                ia.setEstrellas(ia.getEstrellas()-1);
+            }
+        } else if (cartaUsuario.getTipo().equals("Papel")) {
+            if (cartaIa.getTipo().equals("Tijera")) {
+                System.out.println("Perdiste");
+                usuario.setEstrellas(usuario.getEstrellas()-1);
+                ia.setEstrellas(ia.getEstrellas()+1);
+            } else{
+                System.out.println("Ganaste");
+                usuario.setEstrellas(usuario.getEstrellas()+1);
+                ia.setEstrellas(ia.getEstrellas()-1);
+            }
+        } else if (cartaUsuario.getTipo().equals("Tijera")) {
+            if (cartaIa.getTipo().equals("Piedra")) {
+                System.out.println("Perdiste");
+                usuario.setEstrellas(usuario.getEstrellas()-1);
+                ia.setEstrellas(ia.getEstrellas()+1);
+            } else{
+                System.out.println("Ganaste");
+                usuario.setEstrellas(usuario.getEstrellas()+1);
+                ia.setEstrellas(ia.getEstrellas()-1);
+            }
+        }
+        controlP.mergearUsuario(usuario);
+        controlP.mergearUsuario(ia);
+    }
+    
+    
+    
+    public void juego(int desicion, Usuario ia, List<Cartas> cartaMano, int usuarioId){
+        ControladoraPersistencia controlP = new ControladoraPersistencia();
         // TENGO QUE VER LA MANO DE LA IA... YA SABEMOS QUE HACER PARA ESO
         List<CartaUsuario> manoIa = controlP.findByUsuarioId(ia.getUsuarioId());
-
+        
         //AHORA VEO LAS CARTAS EN MANO QUE TIENE
+        
         List<Cartas> cartaManoIa = new ArrayList<>();
         List<Cartas> todas = controlP.traerTodoCarta();
         for (CartaUsuario cartaUsuario : manoIa) {
@@ -121,23 +166,22 @@ public class Usuario extends Thread implements Serializable {
             }
         }
 
-         Random random = new Random();
+        Random random = new Random();
         int eleccionIA = random.nextInt(cartaManoIa.size());
-        System.out.println("El jugador ("+ this.getNombre() +") eligió "+ cartaMano.get(desicion).getTipo() +"\nLa IA eligió "+ cartaManoIa.get(eleccionIA).getTipo());
-    
-        
-        //verificar(ia, desicion, eleccionIA);
+        if(cartaMano.size() == 1){
+            System.out.println("El jugador ("+ this.getNombre() +") eligió "+ cartaMano.get(0).getTipo() +"\nLa IA eligió "+ cartaManoIa.get(eleccionIA).getTipo());
+            desicion = 1;
+        }else{
+            System.out.println("El jugador ("+ this.getNombre() +") eligió "+ cartaMano.get(desicion-1).getTipo() +"\nLa IA eligió "+ cartaManoIa.get(eleccionIA).getTipo());
+        }
+        verificar(cartaMano.get(desicion-1), cartaManoIa.get(eleccionIA), usuarioId, ia.getUsuarioId());
         CartaUsuario cartaUsuarioAEliminar = manoIa.get(desicion);
         try {
             controlP.eliminarCartaUsuario(cartaUsuarioAEliminar.getCartaUsuarioId());
         } catch (Exception e) {
             System.err.println("La carta ya no existe en la base de datos.");
         }
-        
-        /*
-        this.cartas.remove(desicion);
-
-        ia.cartas.remove(eleccionIA);*/
+       
     }
     
     
@@ -153,16 +197,16 @@ public class Usuario extends Thread implements Serializable {
         
         // CARTAS QUE VA A UTILIZAR Y/O VER EL USUARIO
         List<CartaUsuario> cartasUsuario = controlP.findByUsuarioId(usuarioId);
-         // Obtener todas las cartas disponibles
+         // obtengo todas las cartas disponibles
         List<Cartas> todasLasCartas = controlP.traerTodoCarta();
-        // Filtrar las cartas visuales que pertenecen al usuario actual
+        // filtro las cartas visuales que pertenecen al usuario actual
         List<Cartas> cartaMano = new ArrayList<>();
         
         for (CartaUsuario cartaUsuario : cartasUsuario) {
             for (Cartas carta : todasLasCartas) {
                 if (Objects.equals(cartaUsuario.getCartaId().getCartaId(), carta.getCartaId())) {
                     cartaMano.add(carta);
-                    break;  // Salir del bucle interno una vez que se encuentra la carta
+                    break;  
                 }
             }
         }
@@ -180,7 +224,7 @@ public class Usuario extends Thread implements Serializable {
             System.out.println("Elija una carta válida:");
             decision = scan.nextInt();
         }
-        juego(decision, ia, cartaMano);
+        juego(decision, ia, cartaMano, usuarioId);
         // borro la carta utilizada de la bdd
         
         CartaUsuario cartaUsuarioAEliminar = cartasUsuario.get(decision - 1);
@@ -190,7 +234,6 @@ public class Usuario extends Thread implements Serializable {
             System.err.println("La carta ya no existe en la base de datos.");
         }
     }
-    
 
     @Override
     public int hashCode() {
@@ -223,12 +266,14 @@ public class Usuario extends Thread implements Serializable {
         
         Random random = new Random();
         Scanner scan = new Scanner(System.in);
-
         List<CartaUsuario> mano = controlP.findByUsuarioId(this.usuarioId);
+        System.out.println("Tamaño de mano: " + mano.size());
+        
+        
+        
+        
         if(this.usuarioId == 1){
-            // EXPORTAMOS EL DECK ACA
-            
-            
+            System.out.println("Bienvenido usuario");
             while(!mano.isEmpty() && this.estrellas != 0){
                 // SELECCIONAR UNA IA
                 System.out.println("Que ia vas a elegir?");
@@ -242,6 +287,56 @@ public class Usuario extends Thread implements Serializable {
                 }
                 this.juegoPreliminar(this.usuarioId, usuarios.get(opcion), mano);
                 mano = controlP.findByUsuarioId(this.usuarioId);
+            }
+        }else{
+            try{
+                System.out.println("No es un usuario");
+                while(!mano.isEmpty() && this.estrellas != 0){
+                    
+                    Thread.sleep(random.nextInt(1000) + 1000);  // QUE ELIJAN UN NUMERO DE TIEMPO AL AZAR PARA EMPEZAR A JUGAR
+                    
+                    Random eleccionOponente = new Random();
+                    Random eleccionCartaIa = new Random();
+                    Random decisionJugar = new Random();
+                    
+                    /* Necesito las cartas de la ia en cuestion para mandarle a juego directamente, el problema es que 
+                    en el codigo original tenia el arraylist en Usuarios, pero como me muevo por una bdd ahora es diferente,
+                    lo que significa que tengo que declarar acá las manos de las ias para despues mandarla directamente */
+                    
+                    List<Cartas> cartaMano = new ArrayList<>();
+                    List<Cartas> todasLasCartas = controlP.traerTodoCarta();
+        
+                    for (CartaUsuario cartaUsuario : mano) {
+                        for (Cartas carta : todasLasCartas) {
+                            if (Objects.equals(cartaUsuario.getCartaId().getCartaId(), carta.getCartaId())) {
+                                cartaMano.add(carta);
+                                break;  
+                            }
+                        }
+                    }
+                    
+                    
+                    
+                    int eleccionIaCarta = eleccionCartaIa.nextInt(mano.size());
+                    int eleccionOponenteIA = 0;
+                    do{
+                        eleccionOponenteIA = eleccionOponente.nextInt(usuarios.size());
+                    }while(eleccionOponenteIA != 1 && eleccionOponenteIA != 0);
+                    
+                    int eleccionIA = decisionJugar.nextInt(usuarios.get(eleccionOponenteIA).getEstrellas() * 10 + 1);
+                    if(eleccionIA >= 10){
+                        System.out.println(usuarios.get(eleccionOponenteIA).getNombre() +" Acepto el desafio de "+ this.nombre);
+                        juego(eleccionIaCarta, usuarios.get(eleccionOponenteIA), cartaMano, this.usuarioId);
+                        //     public void juego(int desicion, Usuario ia, List<Cartas> cartaMano, int usuarioId){
+                    }else{
+                        System.out.println(usuarios.get(eleccionOponenteIA).getNombre() +" Rechazo el desafio de "+ this.nombre);
+                    }
+                    
+                    Thread.sleep(random.nextInt(5000) + 1000);
+                }
+            }
+            catch (Exception e){
+                System.out.println(this.nombre + " lo interrumpieron");
             }
         }
     }

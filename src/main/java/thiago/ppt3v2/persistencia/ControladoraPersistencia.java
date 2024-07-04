@@ -5,8 +5,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import thiago.ppt3v2.logica.CartaUsuario;
 import thiago.ppt3v2.logica.Cartas;
 import thiago.ppt3v2.logica.Usuario;
@@ -66,10 +68,30 @@ public class ControladoraPersistencia {
         return usuarios;
     }
     
+     public void mergearUsuario(Usuario usuario) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+            em.merge(usuario); // Actualiza el usuario en la base de datos
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
     
     
     
     
+    private EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
     
     // --------------- CARTAS -----------------
 
@@ -125,11 +147,14 @@ public class ControladoraPersistencia {
         public List<CartaUsuario> findByUsuarioId(Integer usuarioId) {
             EntityManager em = getEntityManager();
             try {
-                return em.createQuery("SELECT c FROM CartaUsuario c WHERE c.usuarioId.usuarioId = :usuarioId", CartaUsuario.class)
-                         .setParameter("usuarioId", usuarioId)
-                         .getResultList();
+                TypedQuery<CartaUsuario> query = em.createQuery(
+                    "SELECT cu FROM CartaUsuario cu WHERE cu.usuarioId.usuarioId = :usuarioId", CartaUsuario.class);
+                query.setParameter("usuarioId", usuarioId);
+                return query.getResultList();
             } finally {
-                em.close();
+                if (em != null && em.isOpen()) {
+                    em.close();
+                }
             }
         }
         
@@ -151,20 +176,42 @@ public class ControladoraPersistencia {
     
     // 
 
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+
 
     public List<Cartas> traerTodoCarta() {
         return cartaJpa.findCartasEntities();
     }
 
     public void eliminarCartaUsuario(int id) {
+            
         try {
             cartaUserJpa.destroy(id);
-        } catch (Exception ex) {
-            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NonexistentEntityException ex) {
+            System.err.println("La carta con id " + id + " no existe en la base de datos.");
+        } catch (Exception e) {
+            System.err.println("Error al eliminar la carta con id " + id);
+            e.printStackTrace();
         }
     }
+    
+    public void eliminarTabla(String entidad){
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+        tx.begin();
+        Query query = em.createQuery("DELETE FROM "+entidad);
+        int count = query.executeUpdate();
+        tx.commit();
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+    
+    
     
 }
