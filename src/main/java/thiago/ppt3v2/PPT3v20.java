@@ -1,4 +1,3 @@
-
 package thiago.ppt3v2;
 
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ public class PPT3v20 {
         
         // CREO UNA LISTA DE USUARIOS A SER IMPORTADOS SI LO REQUIERE
         List<Usuario> usuarios = new ArrayList<>();
+                
         
         // EN LAS QUERYS SIEMPRE FIJATE LAS ENTIDADES QUE ESTAN EN PERSISTENCE.XML, POR MAS QUE TE APAREZCA DIFERENTE EN EL DIAGRAMA DE CLASES.
         
@@ -61,7 +61,6 @@ public class PPT3v20 {
         }else{
             // SI NO HAY CARTAS LAS EXPORTO A LA BASE DE DATOS
             System.out.println("No hay cartas");
-            
             Cartas c1 = new Cartas(1, "Piedra");
             Cartas c2 = new Cartas(2, "Papel");
             Cartas c3 = new Cartas(3, "Tijera");
@@ -108,22 +107,9 @@ public class PPT3v20 {
         }
         
         usuarios.get(0).run(); // THREAD DEL PLAYER
-        
-        
-        
-        
-        
-          
         //TENGO QUE REVISAR SI EXISTEN USUARIOS EN TABLAS, ASIMISMO CARTAS 
         
         
-        
-        
-        // PARA CREAR UN USUARIO NECESITO: ID, NOMBRE, ESTRELLAS, CARTAS      
-        
-  
-        
-        
-        //EL PROBLEMA ESTA EN ALGO DE LAS CARTAS, TANTO EL INICIALIZAR COMO ALGO DE AHI, FIJATE!!!
+        // AL FINAL DE TODO BORRAR CARTAS Y CARTAS_USER. GENERA PROBLEMAS.    
     }
 }

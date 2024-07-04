@@ -119,6 +119,9 @@ public class ControladoraPersistencia {
         }
        }
        
+       
+       
+       
         public List<CartaUsuario> findByUsuarioId(Integer usuarioId) {
             EntityManager em = getEntityManager();
             try {
@@ -150,6 +153,18 @@ public class ControladoraPersistencia {
 
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+
+    public List<Cartas> traerTodoCarta() {
+        return cartaJpa.findCartasEntities();
+    }
+
+    public void eliminarCartaUsuario(int id) {
+        try {
+            cartaUserJpa.destroy(id);
+        } catch (Exception ex) {
+            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

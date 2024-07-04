@@ -73,5 +73,12 @@ public class ControladoraLogica {
         return controlPersis.findByUsuarioId(id);
     }
     
+    public List<Cartas> traerTodoCarta(){
+        return controlPersis.traerTodoCarta();
+    }
+    
+    public void eliminarCartaUsuario(int id){
+        controlPersis.eliminarCartaUsuario(id);
+    }
     
 }

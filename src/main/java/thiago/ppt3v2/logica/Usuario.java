@@ -1,8 +1,12 @@
 package thiago.ppt3v2.logica;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Scanner;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -83,6 +87,110 @@ public class Usuario extends Thread implements Serializable {
     public void setCartaUsuarioCollection(Collection<CartaUsuario> cartaUsuarioCollection) {
         this.cartaUsuarioCollection = cartaUsuarioCollection;
     }
+    
+    
+    /*public void juego(int desicion, Usuario ia){
+        Random random = new Random();
+        int eleccionIA = random.nextInt(ia.cartas.size());
+        // implementar win/loose
+        System.out.println("El jugador ("+this.apodo+") eligio "+this.cartas.get(desicion).getTipo()+"\nLa ia eligio "+ ia.cartas.get(eleccionIA).getTipo());
+        verificar(ia, desicion, eleccionIA);
+        //
+        this.cartas.remove(desicion);
+
+        ia.cartas.remove(eleccionIA);
+
+    }*/
+
+    
+    public void juego(int desicion, Usuario ia, List<Cartas> cartaMano){
+        ControladoraPersistencia controlP = new ControladoraPersistencia();
+        
+        // TENGO QUE VER LA MANO DE LA IA... YA SABEMOS QUE HACER PARA ESO
+        List<CartaUsuario> manoIa = controlP.findByUsuarioId(ia.getUsuarioId());
+
+        //AHORA VEO LAS CARTAS EN MANO QUE TIENE
+        List<Cartas> cartaManoIa = new ArrayList<>();
+        List<Cartas> todas = controlP.traerTodoCarta();
+        for (CartaUsuario cartaUsuario : manoIa) {
+            for (Cartas carta : todas) {
+                if (Objects.equals(cartaUsuario.getCartaId().getCartaId(), carta.getCartaId())) {
+                    cartaManoIa.add(carta);
+                    break;  // Salir del bucle interno una vez que se encuentra la carta
+                }
+            }
+        }
+
+         Random random = new Random();
+        int eleccionIA = random.nextInt(cartaManoIa.size());
+        System.out.println("El jugador ("+ this.getNombre() +") eligió "+ cartaMano.get(desicion).getTipo() +"\nLa IA eligió "+ cartaManoIa.get(eleccionIA).getTipo());
+    
+        
+        //verificar(ia, desicion, eleccionIA);
+        CartaUsuario cartaUsuarioAEliminar = manoIa.get(desicion);
+        try {
+            controlP.eliminarCartaUsuario(cartaUsuarioAEliminar.getCartaUsuarioId());
+        } catch (Exception e) {
+            System.err.println("La carta ya no existe en la base de datos.");
+        }
+        
+        /*
+        this.cartas.remove(desicion);
+
+        ia.cartas.remove(eleccionIA);*/
+    }
+    
+    
+    
+    
+    
+    public void juegoPreliminar(int usuarioId, Usuario ia, List<CartaUsuario> mano){
+        ControladoraPersistencia controlP = new ControladoraPersistencia();
+        Scanner scan = new Scanner(System.in);
+        // ANTES DE MOSTRAR LAS CARTAS, NECESITO TENERLAS JSJS
+        // LO QUE TENGO ACA ES EL ID CORRESPONDIENTE A LOS TIPOS DE CARTAS QUE TIENE CADA UNO
+        // QUE SIGNIFICA? QUE AHORA BASICAMENTE TENGO QUE HACER UN ARRAYLIST CON LAS CARTAS "VISUALES" CORRESPONDIENTES AL ID
+        
+        // CARTAS QUE VA A UTILIZAR Y/O VER EL USUARIO
+        List<CartaUsuario> cartasUsuario = controlP.findByUsuarioId(usuarioId);
+         // Obtener todas las cartas disponibles
+        List<Cartas> todasLasCartas = controlP.traerTodoCarta();
+        // Filtrar las cartas visuales que pertenecen al usuario actual
+        List<Cartas> cartaMano = new ArrayList<>();
+        
+        for (CartaUsuario cartaUsuario : cartasUsuario) {
+            for (Cartas carta : todasLasCartas) {
+                if (Objects.equals(cartaUsuario.getCartaId().getCartaId(), carta.getCartaId())) {
+                    cartaMano.add(carta);
+                    break;  // Salir del bucle interno una vez que se encuentra la carta
+                }
+            }
+        }
+        
+        // PONGO LAS CARTAS EN MANO DEL USUARIO
+        int index = 1;
+        System.out.println("¿Qué carta vas a utilizar?");
+        for (Cartas carta : cartaMano) {
+            System.out.println(index + ") " + carta.getTipo());
+            index++;
+        }
+        // Leer la decisión del usuario
+        int decision = scan.nextInt();
+        while (decision < 1 || decision > cartaMano.size()) {
+            System.out.println("Elija una carta válida:");
+            decision = scan.nextInt();
+        }
+        juego(decision, ia, cartaMano);
+        // borro la carta utilizada de la bdd
+        
+        CartaUsuario cartaUsuarioAEliminar = cartasUsuario.get(decision - 1);
+        try {
+            controlP.eliminarCartaUsuario(cartaUsuarioAEliminar.getCartaUsuarioId());
+        } catch (Exception e) {
+            System.err.println("La carta ya no existe en la base de datos.");
+        }
+    }
+    
 
     @Override
     public int hashCode() {
@@ -108,14 +216,32 @@ public class Usuario extends Thread implements Serializable {
     @Override
     public void run(){
         ControladoraPersistencia controlP = new ControladoraPersistencia();
+        
+        // TENGO QUE TRAER A TODOS LOS USUARIOS SEA PARA EL PLAYER O LAS IAS IGUALMENTE.
+        List<Usuario> usuarios = new ArrayList<>();
+        usuarios = controlP.traerTodosLosUsuarios();
+        
+        Random random = new Random();
+        Scanner scan = new Scanner(System.in);
+
+        List<CartaUsuario> mano = controlP.findByUsuarioId(this.usuarioId);
         if(this.usuarioId == 1){
             // EXPORTAMOS EL DECK ACA
-            List<CartaUsuario> mano = controlP.findByUsuarioId(this.usuarioId);
+            
+            
             while(!mano.isEmpty() && this.estrellas != 0){
-                // MOSTRAR LAS IAS
-                
-                
-                
+                // SELECCIONAR UNA IA
+                System.out.println("Que ia vas a elegir?");
+                for(int i=1 ; i < usuarios.size() ; i++ ){
+                    System.out.println(i+ ") "+ usuarios.get(i).getNombre());
+                }
+                int opcion =(scan.nextInt());
+                while(opcion < 1 || opcion > 5){
+                    System.out.println("Ingrese un oponente valido");
+                    opcion = (scan.nextInt());
+                }
+                this.juegoPreliminar(this.usuarioId, usuarios.get(opcion), mano);
+                mano = controlP.findByUsuarioId(this.usuarioId);
             }
         }
     }

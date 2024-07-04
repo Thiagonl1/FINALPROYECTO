@@ -1,12 +1,12 @@
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\persistencia\UsuarioJpaController.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\persistencia\exceptions\PreexistingEntityException.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\persistencia\exceptions\NonexistentEntityException.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\persistencia\CartaUsuarioJpaController.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\logica\Cartas.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\logica\CartaUsuario.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\persistencia\ControladoraPersistencia.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\logica\ControladoraLogica.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\persistencia\exceptions\IllegalOrphanException.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\PPT3v20.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\logica\Usuario.java
-C:\Users\David\Desktop\thiago\PPT3v2.0\src\main\java\thiago\ppt3v2\persistencia\CartasJpaController.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\persistencia\exceptions\NonexistentEntityException.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\persistencia\exceptions\PreexistingEntityException.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\logica\ControladoraLogica.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\persistencia\exceptions\IllegalOrphanException.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\logica\Usuario.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\persistencia\CartasJpaController.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\logica\Cartas.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\logica\CartaUsuario.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\persistencia\ControladoraPersistencia.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\persistencia\CartaUsuarioJpaController.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\persistencia\UsuarioJpaController.java
+C:\Users\lapis\Desktop\Facu\3er año\Progra 3\PPTFINAL\FINALPROYECTO\src\main\java\thiago\ppt3v2\PPT3v20.java
