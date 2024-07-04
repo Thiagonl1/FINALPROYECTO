@@ -293,7 +293,7 @@ public class Usuario extends Thread implements Serializable {
                 System.out.println("No es un usuario");
                 while(!mano.isEmpty() && this.estrellas != 0){
                     
-                    Thread.sleep(random.nextInt(1000) + 1000);  // QUE ELIJAN UN NUMERO DE TIEMPO AL AZAR PARA EMPEZAR A JUGAR
+                    Thread.sleep(random.nextInt(9000) + 1000);  // QUE ELIJAN UN NUMERO DE TIEMPO AL AZAR PARA EMPEZAR A JUGAR
                     
                     Random eleccionOponente = new Random();
                     Random eleccionCartaIa = new Random();
@@ -332,7 +332,7 @@ public class Usuario extends Thread implements Serializable {
                         System.out.println(usuarios.get(eleccionOponenteIA).getNombre() +" Rechazo el desafio de "+ this.nombre);
                     }
                     
-                    Thread.sleep(random.nextInt(5000) + 1000);
+                    Thread.sleep(random.nextInt(9000) + 1000);
                 }
             }
             catch (Exception e){

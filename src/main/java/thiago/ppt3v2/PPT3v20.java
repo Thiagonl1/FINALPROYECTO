@@ -103,9 +103,14 @@ public class PPT3v20 {
                     }
                 }
             }
+        
             
         }
         finally{
+            System.out.println("Ingrese nombre de usuario");
+            Scanner scan = new Scanner(System.in);
+            usuarios.get(0).setNombre(scan.nextLine());
+            control.editarUsuario(usuarios.get(0));
             for (Usuario usuario : usuarios) {
                  usuario.start();
             }
@@ -115,8 +120,7 @@ public class PPT3v20 {
         
         // LE DOY EL DECK A CADA USUARIO EN CASO DE NO TENER
         
-        
-        // PONERLE UN NOMBRE AL USUARIO
+       
         
         
         
@@ -129,7 +133,8 @@ public class PPT3v20 {
         
         
         // AL FINAL DE TODO BORRAR CARTAS Y CARTAS_USER. GENERA PROBLEMAS.   
-        control.eliminarTabla("CartaUsuario");
+        /*control.eliminarTabla("CartaUsuario");
         control.eliminarTabla("Cartas");
+        control.eliminarTabla("Usuario");*/
     }
 }
